@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 
 import PokeCard from "./components/PokeCard";
 
+import { v4 as uuidv4 } from 'uuid';
+
 function App() {
     const [score, setScore] = useState(0);
     const [best, setBest] = useState(0);
@@ -44,14 +46,16 @@ function App() {
             setBest(score);
         }
     }
+
     let cardClick = (index) => () => {
-        if (seen.index == true) {
+        if (seen[index] == true) {
             setBadChoice(true);
+            onOpen()
         } else {
-            seen.index = true;
+            seen[index] = true;
             setScore(score + 1);
             setAnyCardClicked(anyCardClicked + 1);
-            updateBestScore();
+            return;
         }
     };
 
@@ -65,8 +69,9 @@ function App() {
         let cards = [];
         for (let i = 0; i < n; i++) {
             cards.push({
-                index: getRandomInt(0, 151),
+                index: getRandomInt(1, 151),
                 handleClick: cardClick,
+                id: uuidv4()
             });
         }
 
@@ -86,6 +91,13 @@ function App() {
         console.log(cards)
         return () => {};
     }, [anyCardClicked]);
+
+    useEffect(() => {
+      if (score > best) {
+        setBest(score);
+      }
+      return () => {};
+    }, [score])
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
@@ -131,7 +143,7 @@ function App() {
 
                     {cards.map((card) => (
                         <PokeCard
-                            key={card.index}
+                            key={card.id}
                             index={card.index}
                             handleClick={card.handleClick}
                         />
