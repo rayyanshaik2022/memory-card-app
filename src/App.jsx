@@ -53,12 +53,12 @@ function App() {
   };
 
   useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=20")
+    fetch("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=151")
       .then((res) => res.json())
       .then((data) => {
         let newCards = [];
         for (let i = 0; i < 8; i++) {
-          let newIndex = getRandomInt(1, 20);
+          let newIndex = getRandomInt(1, 151);
           newCards.push({
             index: newIndex,
             handleClick: cardClick,
@@ -82,7 +82,7 @@ function App() {
   function createCards(n) {
     let newCards = [];
     for (let i = 0; i < n; i++) {
-      let newIndex = getRandomInt(1, 20);
+      let newIndex = getRandomInt(1, 151);
       newCards.push({
         index: newIndex,
         handleClick: cardClick,
