@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 
 import pixelArtImage from "./assets/pixel_art_bg.png";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import PokeCard from "./components/PokeCard";
 
@@ -27,7 +27,6 @@ function App() {
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
   const [finalScore, setFinalScore] = useState(false);
-  const [anyCardClicked, setAnyCardClicked] = useState(0);
 
   function createSeen() {
     let newObj = {};
@@ -39,30 +38,27 @@ function App() {
   }
 
   const [seen, setSeen] = useState(createSeen);
-  let pokemonData = {}
+  let pokemonData = useRef({});
 
   const [cards, setCards] = useState([]);
 
   let cardClick = (index) => () => {
-
-    createCards(8)
-
     if (seen[index] == true) {
       onOpen();
       setScore(0);
-      setFinalScore(score);
     } else {
       seen[index] = true;
-      setScore(score + 1);
-      setAnyCardClicked(anyCardClicked + 1);
+      setScore(prev => prev + 1);
+      setFinalScore(score);
     }
+
+    createCards(8);
   };
 
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=20")
       .then((res) => res.json())
       .then((data) => {
-
         let newCards = [];
         for (let i = 0; i < 8; i++) {
           let newIndex = getRandomInt(1, 20);
@@ -74,7 +70,7 @@ function App() {
           });
         }
 
-        pokemonData = data;
+        pokemonData.current = data;
         setCards(newCards);
       })
       .catch((e) => console.log(e.message));
@@ -94,7 +90,7 @@ function App() {
         index: newIndex,
         handleClick: cardClick,
         id: uuidv4(),
-        name: pokemonData["results"][newIndex - 1]["name"],
+        name: pokemonData.current["results"][newIndex - 1]["name"],
       });
     }
 
@@ -112,7 +108,7 @@ function App() {
       setBest(score);
     }
     return () => {};
-  }, [score]);
+  }, [score, best]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -150,12 +146,6 @@ function App() {
           }}
           gap={{ base: 6, lg: 16 }}
         >
-          {/* <PokeCard index={"3"} handleClick={cardClick} />
-                    <PokeCard index={"3"} handleClick={cardClick} />
-                    <PokeCard index={"3"} handleClick={cardClick} />
-                    <PokeCard index={"3"} handleClick={cardClick} />
-                    <PokeCard index={"3"} handleClick={cardClick} /> */}
-
           {cards.map((card) => (
             <PokeCard
               key={card.id}
