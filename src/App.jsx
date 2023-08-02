@@ -26,7 +26,6 @@ import { v4 as uuidv4 } from "uuid";
 function App() {
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
-  const [finalScore, setFinalScore] = useState(false);
 
   function createSeen() {
     let newObj = {};
@@ -45,11 +44,9 @@ function App() {
   let cardClick = (index) => () => {
     if (seen[index] == true) {
       onOpen();
-      setScore(0);
     } else {
       seen[index] = true;
       setScore(prev => prev + 1);
-      setFinalScore(score);
     }
 
     createCards(8);
@@ -99,6 +96,7 @@ function App() {
 
   function resetGame() {
     createCards(8);
+    setScore(0);
     setSeen(createSeen());
     onClose();
   }
@@ -165,7 +163,7 @@ function App() {
           <ModalBody>
             <VStack spacing={2} align={"left"} fontSize={24}>
               <p>
-                <b>Final Score: </b> {finalScore}
+                <b>Final Score: </b> {score}
               </p>
               <p>
                 <b>Best Score: </b> {best}
