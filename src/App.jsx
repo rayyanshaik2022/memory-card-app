@@ -37,11 +37,16 @@ function App() {
 
     return newObj;
   }
+
   const [seen, setSeen] = useState(createSeen);
+  let pokemonData = {}
 
   const [cards, setCards] = useState([]);
 
   let cardClick = (index) => () => {
+
+    createCards(8)
+
     if (seen[index] == true) {
       onOpen();
       setScore(0);
@@ -53,6 +58,28 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    fetch("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=20")
+      .then((res) => res.json())
+      .then((data) => {
+
+        let newCards = [];
+        for (let i = 0; i < 8; i++) {
+          let newIndex = getRandomInt(1, 20);
+          newCards.push({
+            index: newIndex,
+            handleClick: cardClick,
+            id: uuidv4(),
+            name: data["results"][newIndex - 1]["name"],
+          });
+        }
+
+        pokemonData = data;
+        setCards(newCards);
+      })
+      .catch((e) => console.log(e.message));
+  }, []);
+
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -60,16 +87,18 @@ function App() {
   }
 
   function createCards(n) {
-    let cards = [];
+    let newCards = [];
     for (let i = 0; i < n; i++) {
-      cards.push({
-        index: getRandomInt(1, 151),
+      let newIndex = getRandomInt(1, 20);
+      newCards.push({
+        index: newIndex,
         handleClick: cardClick,
         id: uuidv4(),
+        name: pokemonData["results"][newIndex - 1]["name"],
       });
     }
 
-    setCards(cards);
+    setCards(newCards);
   }
 
   function resetGame() {
@@ -77,12 +106,6 @@ function App() {
     setSeen(createSeen());
     onClose();
   }
-
-
-  useEffect(() => {
-    createCards(8);
-    return () => {};
-  }, [anyCardClicked]);
 
   useEffect(() => {
     if (score > best) {
@@ -138,6 +161,7 @@ function App() {
               key={card.id}
               index={card.index}
               handleClick={card.handleClick}
+              name={card.name}
             />
           ))}
         </Grid>

@@ -15,12 +15,12 @@ function PokeCard(props) {
             <CardBody>
               <Image
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.index}.png`}
-                alt="Pokemon Image"
+                alt={props.name}
                 mb={6}
                 draggable="false"
               ></Image>
               <Center>
-                <Heading size={"lg"} color={"teal.800"}>Pokemon</Heading>
+                <Heading size={"lg"} color={"teal.800"}>{props.name}</Heading>
               </Center>
             </CardBody>
           </Card>
