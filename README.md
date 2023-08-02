@@ -1,8 +1,21 @@
-# React + Vite
+# memory-card-app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Live Demo Link
+[Click Here for demo]()
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Completion Date
+08/01/20023
+
+## Finishing Remarks & Thoughts
+
+A simple app, nothing too amazing. This project took me about 4 hours to make
+and about 2 hours to debug.
+
+It was my first time using "useEffect" hooks, and this project helped me
+greatly in understanding them (and better know the "useState" hook)
+
+## Features & Improvements
+
+* __API__ : Calls an API for images and pokemon names
